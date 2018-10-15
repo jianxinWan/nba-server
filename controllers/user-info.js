@@ -1,6 +1,6 @@
 const userInfoService = require('./../services/user-info');
 const jwt = require('jsonwebtoken');
-const secret = 'jwt demo';
+const jwtSecret = 'jwtdemo';
 module.exports = {
     /**
      * 登录操作  
@@ -20,9 +20,9 @@ module.exports = {
             result.success = true;
             result.message ="login success";
             const userToken = {
-                name:formData.email
+                email:formData.email
             }
-            const token = jwt.sign(userToken,secret,{expiresIn:'1h'})//token签名，有效时长为一小时
+            const token = jwt.sign(userToken,jwtSecret,{expiresIn:'1h'})//token签名，有效时长为一小时
             ctx.body = {
                 result,
                 token
@@ -46,6 +46,17 @@ module.exports = {
      */
     async getUserInfo(ctx){
         const token = ctx.request.header.authorization;
+        if(token){
+            ctx.body = {
+                msg:'认证成功'
+            }
+        } else{
+            ctx.bod有= {
+                message:'token错误',
+                code:-1
+            }
+        }
+        console.log(token);
         ctx.body = 'this is a test api';
     }
 }
