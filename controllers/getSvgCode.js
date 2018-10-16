@@ -1,4 +1,7 @@
 const svgCaptcha = require('svg-captcha');
+const sendEmail = require('../services/sendEmail');
+const emailInfo = require('../util/email-info');
+const getRandom = require('../util/getRandom');
 module.exports  =  {
     async getSvgCode (ctx){
         const svgCode = svgCaptcha.create({
@@ -20,23 +23,43 @@ module.exports  =  {
     async emailVerify(ctx){
         let formData = ctx.request.body;
         if(formData.code){
+            //转换大小写
             let serverCode = ctx.session.svgCode.toLocaleLowerCase();
             let browserCode = formData.code.toLocaleLowerCase();
             if(serverCode === browserCode){
-                ctx.body = {
-                    success:true,
-                    msg:'the code is ok'
+                const code  = getRandom(6);//后台生成随机验证码
+                const emailBase = emailInfo(code);//生成邮箱的基本内容
+                ctx.session.emilCode = code;//保存用户验证码
+                ctx.session.emil = formData.email;//保存用户邮箱信息
+                let mailOptions = {
+                    from: 'origin_wan@126.com', // 发件人地址
+                    to: formData.email, // 收件人地址，多个收件人可以使用逗号分隔
+                    subject: emailBase.title, // 邮件标题
+                    html: emailBase.htmlBody // 邮件内容
+                };
+                let sendState = await sendEmail.send(mailOptions);
+                if(sendState.accepted){
+                    ctx.body = {
+                        success:true,
+                        msg:'验证成功'
+                    }
+                }else{
+                    ctx.body = {
+                        success:false,
+                        msg:'验证失败'
+                    }
                 }
+                
             }else{
                 ctx.body = {
                     success:false,
-                    msg:'the code is error'
+                    msg:'验证码错误！'
                 }
             }
         }else{
             ctx.body = {
                 success:false,
-                msg:'the code is null!'
+                msg:'验证码为空'
             }
         }
     }
