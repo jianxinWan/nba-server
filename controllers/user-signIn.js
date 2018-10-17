@@ -1,4 +1,4 @@
-const userInfoService = require('./../services/user-info');
+const signInService = require('../services/user-signIn');
 const jwt = require('jsonwebtoken');
 const jwtSecret = 'jwtdemo';
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
             data:null,
             code:''
         }
-        let userResult = await userInfoService.signIn(formData);
+        let userResult = await signInService.signIn(formData);
         if(userResult){
             result.success = true;
             result.message ="login success";
@@ -38,8 +38,6 @@ module.exports = {
      * 
      * @param {object} ctx 
      */
-    async singUp(ctx){
-    },
     /**
      * 获取用户信息
      * @param {object} ctx 

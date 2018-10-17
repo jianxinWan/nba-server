@@ -1,4 +1,4 @@
-const duUtils = require('./../util/db-util');
+const duUtils = require('../util/db-util');
 
 /**
  * 根据用户名密码查找用户
@@ -6,7 +6,7 @@ const duUtils = require('./../util/db-util');
  * @return {object|null}
  */
 
-const user = {
+module.exports = {
     async getOneByEmailAndPassword(options){
         let _sql = `SELECT * FROM  user_info WHERE password="${options.password}" AND email="${options.email}" limit 1`;
         let result = await duUtils.query(_sql);
@@ -17,6 +17,4 @@ const user = {
         }
         return result;
     }
-}
-
-module.exports = user;
+};

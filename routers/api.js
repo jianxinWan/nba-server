@@ -1,10 +1,11 @@
 const router  = require('koa-router')();
-const userInfoController = require('./../controllers/user-info');
+const userSignInController = require('../controllers/user-signIn');
+const userSignUpController = require('../controllers/user-signUp');
 const getSvgCodeController = require('./../controllers/getSvgCode');
 const routers = router
-    .post('/signIn',userInfoController.signIn)
-    .get('/getUserInfo',userInfoController.getUserInfo)
+    .post('/signIn',userSignInController.signIn)
+    .get('/getUserInfo',userSignInController.getUserInfo)
     .get('/getSvgCode',getSvgCodeController.getSvgCode)
     .post('/getEmailVerify',getSvgCodeController.emailVerify)
-    .post('/signUp')
+    .post('/signUp',userSignUpController.singUp)
 module.exports = routers;

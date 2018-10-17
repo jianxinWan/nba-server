@@ -2,20 +2,19 @@
  * 用户业务操作
  */
 
-const userModel = require('./../models/user-info');
+const userSignIn = require('../models/user-signin');
 
  /**
   * 登录业务操作
   */
-const user = {
+
+module.exports = {
     async signIn(formData){
-        let resultData = await userModel.getOneByEmailAndPassword({
+        let resultData = await userSignIn.getOneByEmailAndPassword({
             'password': formData.password,
             'email': formData.email
         })
         return resultData;
     }
 }
-
-module.exports = user;
   
