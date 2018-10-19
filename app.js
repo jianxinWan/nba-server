@@ -8,9 +8,9 @@ const jwtSecret  = 'jwtdemo';
 const routers = require('./routers/index');
 app.use(bodyParser());
 
-app.use(jwtKoa({secret:jwtSecret}).unless({
-    path:[/^\/user\/signIn/,/^\/user\/signUp$/,/^\/user\/getSvgCode$/,/^\/user\/getEmailVerify$/]
-}));
+// app.use(jwtKoa({secret:jwtSecret}).unless({
+//     path:[/^\/user\/signIn/,/^\/user\/signUp$/,/^\/user\/getSvgCode$/,/^\/user\/getEmailVerify$/]
+// }));
 
 //存放sessionId的cookie配置
 let cookie = {
@@ -30,7 +30,7 @@ app.use(session({
 //数组中的路径不需要通过jwt验证
 
 app.use(async(ctx,next)=>{
-    ctx.set("Access-Control-Allow-Origin", "http://localhost:3000");
+    ctx.set("Access-Control-Allow-Origin", `${ctx.request.header.origin}`);
     // 这样就能只允许 http://localhost:3000 这个域名的请求了
     // 设置所允许的HTTP请求方法
     ctx.set("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
@@ -53,6 +53,6 @@ app.use(async(ctx,next)=>{
 //初始化路由中间件
 app.use(routers.routes()).use(routers.allowedMethods());
 
-app.listen(8848,()=>{
-    console.log('the server run port 8848');
+app.listen(8686,()=>{
+    console.log('the server run port 8686');
 })

@@ -1,43 +1,49 @@
 const userSignUp = require('../services/user-signUp');
-const jwt = require('jsonwebtoken');
-const jwtSecret = 'jwtdemo';
+const checkEmail = require('../services/sendEmail');
 module.exports = {
     /**
-     * 登录处理
+     * 注册控制
      * @param {object}  
      */
     async singUp(ctx){
         //判断验证码是否正确
-        if(ctx.session.emailCode){
+        if(!ctx.session.emailCode){
             ctx.body = {
                 success:false,
-                mes:'Verification code failure'
+                msg:'验证码失效，请重新进行认证'
             }
         }else{
-            if(ctx.request.body.emailCode !== ctx.session.emilCode){
+            if(ctx.request.body.emailCode === ctx.session.emailCode){
                 const formData = ctx.request.body;
-                console.log(formData);
                 let userInfo = {
                     userName:formData.userName,
-                    email:ctx.session.emailCode,
+                    email:ctx.session.email,
                     password:formData.password,
-                    emilCode:formData.emailCode,
                     phone:formData.phoneNum
                 }
-                const result = await userSignUp.signUp(userInfo);
-                ctx.body = {
-                    success:true,
-                    msg:'regist success',
-                    result
+                //再次检查用户信息是否唯一
+                let resultDta = await checkEmail.checkOne(ctx.session);
+                if(resultDta.length === 0){
+                    const result = await userSignUp.signUp(userInfo);
+                    if(result.serverStatus === 2){
+                        ctx.body = {
+                            success:true,
+                            msg:'注册成功',
+                            signUp:true
+                        }
+                    }
+                }else{
+                    ctx.body = {
+                        success:false,
+                        msg:'用户已存在'
+                    }
                 }
-                
             }else{
                 ctx.body = {
                     success:false,
-                    mes:'emailCode is error'
+                    msg:'邮箱验证码错误'
                 }
             }
         }
-        
     },
 }

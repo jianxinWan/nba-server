@@ -18,6 +18,7 @@ module.exports = {
             password:formData.password,
             phone:formData.phone
         })
+        console.log(resultData);
         return resultData;
     }
 };

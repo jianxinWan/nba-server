@@ -15,29 +15,27 @@ module.exports = {
             data:null,
             code:''
         }
+        console.log("enter siginIn api");
         let userResult = await signInService.signIn(formData);
         if(userResult){
             result.success = true;
-            result.message ="login success";
+            result.message ="登录成功";
             const userToken = {
                 email:formData.email
             }
             const token = jwt.sign(userToken,jwtSecret,{expiresIn:'1h'})//token签名，有效时长为一小时
+            console.log('login success!');
             ctx.body = {
                 result,
                 token
             };
         }else{
-            result.message = 'login faild  please try again';
+            result.message = '登录失败';
             ctx.body = {
                 result
             }
         }
-    },    
-    /**
-     * 
-     * @param {object} ctx 
-     */
+    }, 
     /**
      * 获取用户信息
      * @param {object} ctx 
