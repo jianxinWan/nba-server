@@ -10,7 +10,6 @@ const userSignIn = require('../models/user-signIn');
 
 module.exports = {
     async signIn(formData){ 
-        console.log("signIn  service");
         let resultData = await userSignIn.getOneByEmailAndPassword({
             'password': formData.password,
             'email': formData.email

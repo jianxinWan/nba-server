@@ -1,6 +1,6 @@
 const signInService = require('../services/user-signIn');
 const jwt = require('jsonwebtoken');
-const jwtSecret = 'jwtdemo';
+const jwtSecret = require('../util/tokenKey');
 module.exports = {
     /**
      * 登录操作  
@@ -15,7 +15,6 @@ module.exports = {
             data:null,
             code:''
         }
-        console.log("enter siginIn api");
         let userResult = await signInService.signIn(formData);
         if(userResult){
             result.success = true;
@@ -23,8 +22,8 @@ module.exports = {
             const userToken = {
                 email:formData.email
             }
-            const token = jwt.sign(userToken,jwtSecret,{expiresIn:'1h'})//token签名，有效时长为一小时
-            console.log('login success!');
+            const token = jwt.sign(userToken,jwtSecret.secret,{expiresIn:'24h'})
+            //token签名，设置有效时长
             ctx.body = {
                 result,
                 token
@@ -35,24 +34,5 @@ module.exports = {
                 result
             }
         }
-    }, 
-    /**
-     * 获取用户信息
-     * @param {object} ctx 
-     */
-    async getUserInfo(ctx){
-        const token = ctx.request.header.authorization;
-        if(token){
-            ctx.body = {
-                msg:'认证成功'
-            }
-        } else{
-            ctx.bod有= {
-                message:'token错误',
-                code:-1
-            }
-        }
-        console.log(token);
-        ctx.body = 'this is a test api';
     }
 }

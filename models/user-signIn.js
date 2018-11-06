@@ -13,7 +13,6 @@ module.exports = {
      * @param {} options 
      */
     async getOneByEmailAndPassword(options){
-        console.log("signIn  model");
         let md5 = crypto.createHash("md5");
         let cryptopPass = md5.update(options.password).digest("hex");
         let _sql = `SELECT * FROM  user_info WHERE password="${cryptopPass}" AND email="${options.email}" limit 1`;
@@ -23,7 +22,6 @@ module.exports = {
         }else{
             result = null;
         }
-        console.log("leave model");
         return result;
     }
 };

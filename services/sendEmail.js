@@ -21,7 +21,6 @@ module.exports ={
     async sendMail(mail){
         console.log('enter email server');
         return new Promise((resolve,reject)=>{
-            console.log(mail);
             transporter.sendMail(mail,(err,info)=>{
                 if(err){
                     console.log(err);

@@ -36,7 +36,6 @@ module.exports  =  {
             let browserCode =String(formData.code).toLocaleLowerCase();
             if(serverCode === browserCode){
                 let resultData = await email.checkOne(formData);
-                console.log(resultData);
                 if(resultData.length === 0){
                     const code  = getRandom(6);//后台生成随机验证码
                     const emailBase = emailInfo(code);//生成邮箱的基本内容
@@ -49,7 +48,6 @@ module.exports  =  {
                         html: emailBase.htmlBody // 邮件内容
                     };
                     let sendState = await email.sendMail(mailOptions);
-                    console.log('send email finish');
                     if(sendState.accepted){
                         ctx.body = {
                             success:true,
